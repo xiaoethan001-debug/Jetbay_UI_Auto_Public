@@ -38,9 +38,9 @@ Recommended GitHub repository secrets:
 - `JETBAY_TEST_BASE_URL`
 - `JETBAY_TEST_LOGIN_EMAIL`
 - `JETBAY_TEST_LOGIN_PASSWORD`
-- `WECOM_WEBHOOK_URL` (optional, for Enterprise WeChat notifications)
+- `WECOM_WEBHOOK_URL` (optional, for Enterprise WeChat notifications and report screenshots)
 
-The public repository workflows require the first three secrets above. `WECOM_WEBHOOK_URL` is optional and only used for regression notifications.
+The public repository workflows require the first three secrets above. `WECOM_WEBHOOK_URL` is optional and is used by the regression workflow to send an Enterprise WeChat summary plus an Allure overview screenshot.
 
 GitHub setup path:
 
