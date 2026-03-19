@@ -38,8 +38,9 @@ Recommended GitHub repository secrets:
 - `JETBAY_TEST_BASE_URL`
 - `JETBAY_TEST_LOGIN_EMAIL`
 - `JETBAY_TEST_LOGIN_PASSWORD`
+- `WECOM_WEBHOOK_URL` (optional, for Enterprise WeChat notifications)
 
-The public repository workflows currently only require the three secrets above.
+The public repository workflows require the first three secrets above. `WECOM_WEBHOOK_URL` is optional and only used for regression notifications.
 
 GitHub setup path:
 

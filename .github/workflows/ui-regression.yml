@@ -93,3 +93,79 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  notify:
+    if: always()
+    needs:
+      - regression
+      - deploy-report
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send WeCom notification
+        env:
+          WECOM_WEBHOOK_URL: ${{ secrets.WECOM_WEBHOOK_URL }}
+          REPOSITORY: ${{ github.repository }}
+          BRANCH: ${{ github.ref_name }}
+          EVENT_NAME: ${{ github.event_name }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          REGRESSION_RESULT: ${{ needs.regression.result }}
+          DEPLOY_RESULT: ${{ needs.deploy-report.result }}
+          REPORT_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import urllib.request
+
+          webhook = os.getenv("WECOM_WEBHOOK_URL", "").strip()
+          if not webhook:
+              print("WECOM_WEBHOOK_URL is not configured; skipping notification.")
+              raise SystemExit(0)
+
+          regression_result = os.getenv("REGRESSION_RESULT", "unknown")
+          deploy_result = os.getenv("DEPLOY_RESULT", "unknown")
+          repository = os.getenv("REPOSITORY", "")
+          branch = os.getenv("BRANCH", "")
+          event_name = os.getenv("EVENT_NAME", "")
+          run_url = os.getenv("RUN_URL", "")
+          report_url = os.getenv("REPORT_URL", "")
+
+          overall_success = regression_result == "success" and deploy_result in {"success", "skipped"}
+          status_text = "SUCCESS" if overall_success else "FAILED"
+          status_color = "info" if overall_success else "warning"
+
+          report_line = (
+              f"> Report: [Open Allure Report]({report_url})"
+              if deploy_result == "success"
+              else "> Report: GitHub Pages not available for this run"
+          )
+
+          content = "\n".join(
+              [
+                  f"## UI Regression <font color=\"{status_color}\">{status_text}</font>",
+                  f"> Repository: `{repository}`",
+                  f"> Branch: `{branch}`",
+                  f"> Trigger: `{event_name}`",
+                  f"> Regression: `{regression_result}`",
+                  f"> Pages Deploy: `{deploy_result}`",
+                  f"> Run: [Open GitHub Actions Run]({run_url})",
+                  report_line,
+              ]
+          )
+
+          payload = {
+              "msgtype": "markdown",
+              "markdown": {
+                  "content": content,
+              },
+          }
+
+          request = urllib.request.Request(
+              webhook,
+              data=json.dumps(payload).encode("utf-8"),
+              headers={"Content-Type": "application/json"},
+          )
+          with urllib.request.urlopen(request, timeout=15) as response:
+              body = response.read().decode("utf-8", errors="replace")
+              print(body)
+          PY
