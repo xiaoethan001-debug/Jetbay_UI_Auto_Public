@@ -269,11 +269,21 @@ class HomePage(BasePage):
         top_menu.hover()
         self.page.wait_for_timeout(1000)
 
-        target_link = header.locator(f"a[href*='{href_keyword}']:visible").filter(
-            has_text=menu_text
+        target_link = header.locator(
+            f"a[href='{href_keyword}']:visible:text-is('{menu_text}')"
         ).first
         if target_link.count() == 0:
+            target_link = header.locator(f"a[href='{href_keyword}']:visible").first
+        if target_link.count() == 0:
+            target_link = header.locator(
+                f"a[href*='{href_keyword}']:visible:text-is('{menu_text}')"
+            ).first
+        if target_link.count() == 0:
             target_link = header.locator(f"a[href*='{href_keyword}']:visible").first
+        if target_link.count() == 0:
+            target_link = self.page.locator(
+                f"a[href*='{href_keyword}']:visible:text-is('{menu_text}')"
+            ).first
         if target_link.count() == 0:
             target_link = self.page.locator(f"a[href*='{href_keyword}']:visible").first
         target_link.wait_for(state="visible", timeout=10000)
