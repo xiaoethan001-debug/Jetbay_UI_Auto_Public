@@ -17,13 +17,6 @@ jobs:
       JETBAY_TEST_BASE_URL: ${{ secrets.JETBAY_TEST_BASE_URL }}
       JETBAY_TEST_LOGIN_EMAIL: ${{ secrets.JETBAY_TEST_LOGIN_EMAIL }}
       JETBAY_TEST_LOGIN_PASSWORD: ${{ secrets.JETBAY_TEST_LOGIN_PASSWORD }}
-      JETBAY_TEST_DB_NAME: ${{ secrets.JETBAY_TEST_DB_NAME }}
-      JETBAY_TEST_DB_HOST: ${{ secrets.JETBAY_TEST_DB_HOST }}
-      JETBAY_TEST_DB_PORT: ${{ secrets.JETBAY_TEST_DB_PORT }}
-      JETBAY_TEST_DB_USER: ${{ secrets.JETBAY_TEST_DB_USER }}
-      JETBAY_TEST_DB_PASSWORD: ${{ secrets.JETBAY_TEST_DB_PASSWORD }}
-      JETBAY_TEST_DB_DATABASE: ${{ secrets.JETBAY_TEST_DB_DATABASE }}
-      JETBAY_TEST_DB_CHARSET: ${{ secrets.JETBAY_TEST_DB_CHARSET }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6

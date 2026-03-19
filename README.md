@@ -38,13 +38,8 @@ Recommended GitHub repository secrets:
 - `JETBAY_TEST_BASE_URL`
 - `JETBAY_TEST_LOGIN_EMAIL`
 - `JETBAY_TEST_LOGIN_PASSWORD`
-- `JETBAY_TEST_DB_NAME`
-- `JETBAY_TEST_DB_HOST`
-- `JETBAY_TEST_DB_PORT`
-- `JETBAY_TEST_DB_USER`
-- `JETBAY_TEST_DB_PASSWORD`
-- `JETBAY_TEST_DB_DATABASE`
-- `JETBAY_TEST_DB_CHARSET`
+
+The public repository workflows currently only require the three secrets above.
 
 GitHub setup path:
 
